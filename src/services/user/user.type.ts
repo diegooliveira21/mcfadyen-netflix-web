@@ -9,6 +9,6 @@ export type AuthResponse = AxiosResponse<{
   token: string
 }>;
 
-export enum AuthErrorMessage {
-  UNREACHABLE_AUTHENTICATION = 'An error occurred on authenticate user',
-}
+export const ErrorMessageEnum = {
+  Unauthorized: 'An error occurred on authenticate user',
+};
