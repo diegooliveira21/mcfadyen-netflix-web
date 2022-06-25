@@ -1,3 +1,3 @@
 export type TextProps = {
-  fontWeight?: string
+  fontWeight?: number
 };

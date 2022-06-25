@@ -21,13 +21,16 @@ function* authentication(action: PayloadAction<AuthPayload>) {
   }
 }
 
-function* sanitizeValues() {
-  yield put(userSlice.actions.setError(''));
+function* logoff() {
+  const { data } = userSlice.getInitialState();
+
+  yield put(userSlice.actions.setData(data));
+  localStorage.removeItem(USER_TOKEN_COOKIE);
 }
 
 const userSaga = [
   takeLatest('user/authentication', authentication),
-  takeLatest('user/cart', sanitizeValues),
+  takeLatest('user/logoff', logoff),
 ];
 
 export default userSaga;

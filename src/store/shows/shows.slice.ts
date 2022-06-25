@@ -3,7 +3,10 @@ import { Shows } from 'store/shows/shows.type';
 import reducers from 'store/shows/shows.reducer';
 
 const initialState: Shows = {
-  data: { },
+  data: {
+    myList: [],
+    list: {},
+  },
   settings: {
     loading: false,
   },

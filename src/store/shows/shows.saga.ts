@@ -8,11 +8,13 @@ import {
 } from 'redux-saga/effects';
 import showsService from 'services/shows/shows';
 import { AxiosResponse } from 'axios';
-import { List } from 'store/shows/shows.type';
+import { Show } from 'store/shows/shows.type';
 import { tokenSelector } from 'store/user/user.selector';
 import { Data as UserData } from 'store/user/user.type';
 
 function* getList() {
+  yield put(showsActions.setSettings({ loading: true }));
+
   const token: UserData['token'] = yield select(tokenSelector);
 
   if (!token) {
@@ -21,7 +23,7 @@ function* getList() {
   }
 
   try {
-    const response: AxiosResponse<List> = yield call(
+    const response: AxiosResponse<Show[]> = yield call(
       showsService({ token: token as string }).getList,
     );
 
@@ -35,8 +37,31 @@ function* getList() {
       };
     }, {});
 
-    yield put(showsActions.setData({ ...showsList }));
-    yield put(showsActions.setSettings({ loading: true }));
+    yield put(showsActions.setList(showsList));
+  } catch (exception) {
+    yield put(showsActions.setError('Error'));
+  } finally {
+    yield put(showsActions.setSettings({ loading: false }));
+  }
+}
+
+function* getMyList() {
+  yield put(showsActions.setSettings({ loading: true }));
+
+  const token: UserData['token'] = yield select(tokenSelector);
+
+  if (!token) {
+    yield put(showsActions.setError('User token was not found'));
+    yield cancel();
+  }
+
+  try {
+    const response: AxiosResponse<Show[]> = yield call(
+      showsService({ token: token as string }).getMyList,
+    );
+
+    yield put(showsActions.setMyList(response.data));
+    yield put(showsActions.setError(''));
   } catch (exception) {
     yield put(showsActions.setError('Error'));
   } finally {
@@ -46,6 +71,7 @@ function* getList() {
 
 const showsSaga = [
   takeLatest('shows/getList', getList),
+  takeLatest('shows/getMyList', getMyList),
 ];
 
 export default showsSaga;

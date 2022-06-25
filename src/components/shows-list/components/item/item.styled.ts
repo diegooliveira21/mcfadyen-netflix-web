@@ -1,9 +1,9 @@
 import styled from 'styled-components';
-import { Props } from 'components/shows-list/components/item/item.type';
+import { CoverProps } from 'components/shows-list/components/item/item.type';
 
-export const Cover = styled.div<Pick<Props, 'cover'>>`
-  width: 200px;
-  height: 260px;
+export const Cover = styled.div<CoverProps>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
   
   background-image: url(${(props) => props.cover});
   background-repeat: no-repeat;
